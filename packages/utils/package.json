@@ -1,0 +1,24 @@
+{
+  "name": "@mamieleo/utils",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "module": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "types:check": "tsc --build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vite": "^6.0.0"
+  },
+  "devDependencies": {
+    "vite-plugin-dts": "^4.5.3"
+  }
+}
