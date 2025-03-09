@@ -1,24 +1,47 @@
 type Obj = Record<string, any>
+type Arr = any[]
 
 
-export function deepMerge(obj1: Obj, obj2: Obj): Obj {
-    const merged = { ...obj1, ...obj2 };
-  
+function mergeObjects<T extends Obj, D extends Obj>(first: T, second: D) {
+
+  const merged = { ...first, ...second } satisfies T & D;
+
+    console.log('Merged first layer: ', merged)
+
     for (const key in merged) {
-      if (merged.hasOwnProperty(key)) {
+      if (second.hasOwnProperty(key)) {
+
+        console.log('Keys types: ', `${typeof first[key]} | ${typeof second[key]}`)
+        const property = key as keyof (T & D)
 
         if (typeof merged[key] !== 'object') {
-          merged[key] = obj2[key];
+          merged[property] = second[key];
         }
-        if (typeof obj1[key] === 'object' && typeof obj2[key] === 'object' ){
-          
-            const firstElement = obj1[key] 
-            const secondElement = obj2[key]
-          
-            merged[key] = deepMerge(firstElement, secondElement);
+        else if (typeof first[key] === 'object' && typeof second[key] === 'object' ){
+            merged[property] = mergeProperties(first[key], second[key]);
         }
       }
     }
   
+    console.log('result merge: ', merged)
     return merged;
+}
+
+function mergeArrays<T extends Arr, D extends Arr>(first: T, second: D) {
+  return [...first, ...second]
+}
+
+export function deepMerge<T extends Obj, D extends Obj>(first: T, second: D) {
+  return mergeObjects(first, second)
+}
+
+
+function mergeProperties<T extends Obj, D extends Obj>(first: T, second: D) {
+    
+  if (Array.isArray(first) && Array.isArray(second)) {
+    return mergeArrays(first, second)
   }
+
+  return mergeObjects(first, second)
+
+}
