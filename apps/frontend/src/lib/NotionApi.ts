@@ -1,16 +1,29 @@
 import { AppConfig }from '@config'
-import { deepMerge } from '@mamieleo/utils'
+import { deepMerge, formatDateToString } from '@mamieleo/utils'
 
 type RequestMethod =
     'GET'
 
-type NotionReservation = {
-
+export type NotionReservation = {
+    Name: string;
+    'Date réservation': string;
+    'Date entrée': string;
+    'Date de sortie': string;
+    'Nombre de nuit': number;
+    'Tarif CFA': number;
 }
 
 namespace NotionApiError {
-
+    export class UnexpectedError extends Error {
+        constructor() {
+            super('Unexpected error')
+        }
+    }
 }
+
+type RequestParameters = {method: RequestMethod, path: string, body?: Record<string, unknown> }
+
+type QueryFilter = {[K in string]: unknown} & {property: string}
 
 const RESERVATION_MAPPER = {
     entryDate: "Date d'entrée"
@@ -48,7 +61,7 @@ export class NotionApi {
         return headers
     }
 
-    private async makeRequest({method, path, body}:{method: RequestMethod, path: string, body: Record<string, unknown> }) {
+    private async makeRequest<T>({method, path, body}:RequestParameters): Promise<T> {
 
         const options = {
             method,
@@ -58,42 +71,57 @@ export class NotionApi {
 
         const response = await fetch(`${this.config.url}${path}`, options)
 
-        if (response.ok) {
-            return response.json()
+        if (!response.ok) {
+            throw new NotionApiError.UnexpectedError()
         }
+        const data = await response.json()
+        return data
     }
 
-     async queryReservations(filter?: {entry:  {min?: Date; max?: Date}}) {
-        const body = {}
-        const options = {
-            method: 'GET',
-            path: `/databases/${this.config.databases.reservations}/query`
-        }
-
-        const filters: ({[K in string]: unknown} & {property: string})[]= []
-
-        if(filter?.entry.min) {
-            filters.push({
-                property: RESERVATION_MAPPER.entryDate,
-                date : {
-                    [DATE_MAPPER.onOrAfter]: filter?.entry.min
-                }
-            })
-        }
+    private formatBodyFilters(filters: QueryFilter[], condition: 'AND' | 'OR') {
 
         const propertyPositions: Record<string, number> = {}
-        const formattedFilters = filters.reduce((filter, item) => {
+        const formattedFilters = filters.reduce((filters: QueryFilter[], item: QueryFilter) => {
 
             if (!propertyPositions[item.property]) {
                 filters.push(item)
                 propertyPositions[item.property] = filters.length-1
             } else {
-                propertyPositions[item.property] = deepMerge()
+                filters[propertyPositions[item.property]] = deepMerge(filters[propertyPositions[item.property]], item)
             }
 
-            return filter
-        }, {})
+            return filters
+        }, [])
 
-        await this.makeRequest(options)
+        if (formattedFilters.length) {
+            return formattedFilters.length === 1 ?  filters[0] : {
+                [condition]: filters
+            }
+        }
+    }
+
+     async queryReservations(filter?: {entry:  {min?: Date; max?: Date}}) {
+        const options: RequestParameters = {
+            method: 'GET',
+            path: `/databases/${this.config.databases.reservations}/query`,
+            body: {}
+        }
+
+        const filters: QueryFilter[]= []
+
+        if(filter?.entry.min) {
+            filters.push({
+                property: RESERVATION_MAPPER.entryDate,
+                date : {
+                    [DATE_MAPPER.onOrAfter]: formatDateToString(filter.entry.min)
+                }
+            })
+        }
+
+        if (filters.length && options.body) {
+            options.body.filters = this.formatBodyFilters(filters, 'AND')
+        }
+
+        return this.makeRequest<NotionReservation[]>(options)
     }
 }

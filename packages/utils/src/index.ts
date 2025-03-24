@@ -1,2 +1,6 @@
 import {deepMerge} from './object'
-export { deepMerge }
+import { typedMock } from './types'
+import { formatDateToString } from './date'
+
+
+export { deepMerge, typedMock, formatDateToString  }
