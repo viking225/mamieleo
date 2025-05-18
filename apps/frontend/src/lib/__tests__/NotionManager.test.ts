@@ -38,6 +38,8 @@ describe('Notion Manager', () => {
         })
 
         describe('And data returned by api', () => {
+            const getReservationApiMock = vi.mocked(NotionApi.instance.queryReservations)
+
             const apiResult = [{
                 Name: 'Chambre 4',
                 'Date réservation': '2024-10-01',
@@ -55,12 +57,11 @@ describe('Notion Manager', () => {
             }] satisfies NotionReservation[]
 
             beforeEach(() => {
-                vi.mocked(NotionApi.instance.queryReservations).mockResolvedValueOnce(apiResult)
+                getReservationApiMock.mockResolvedValueOnce(apiResult)
             })
 
             describe('When called', () => {
                 test('Then it calls getReservations from notion api', async () => {
-                    const getReservationApiMock = vi.mocked(NotionApi.instance.queryReservations)
                     await instance.getReservations()
                     expect(getReservationApiMock).toHaveBeenCalled()
                 })
@@ -72,8 +73,8 @@ describe('Notion Manager', () => {
                     expect(result[0]).toEqual({
                         name: 'Chambre 4',
                         reservationDate: '2024-10-01',
-                        dateOut: '2024-10-02',
-                        dateIn: '2024-10-04',
+                        dateIn: '2024-10-02',
+                        dateOut: '2024-10-04',
                         numberOfNights: 33,
                         amount: 1000000,
                     })

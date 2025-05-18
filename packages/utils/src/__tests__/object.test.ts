@@ -1,6 +1,6 @@
 
 import {describe, expect, test} from 'vitest'
-import { deepMerge } from '../object'
+import { deepMerge, mapObject } from '../object'
 
 
 describe('Object utils', () => {
@@ -68,6 +68,59 @@ describe('Object utils', () => {
                     const result = deepMerge({events: ['VMA', 'SUNDAYS']}, {events: ['COP2022']})
                     expect(Array.isArray(result.events)).toBeTruthy()
                     expect(result.events).toEqual(['VMA', 'SUNDAYS', 'COP2022'])
+                })
+            })
+        })
+    })
+
+    describe('Given mapObject function', () => {
+        describe('And empty mapper', () => {
+            const mapper = {}
+            describe('When called with empty object', () => {
+                test('Then it returns empty object', () => {
+                    expect(mapObject({}, mapper)).toStrictEqual({})
+                })
+            })
+
+            describe('When called with object with data', () => {
+                test('Then it returns empty object', () => {
+                    const result = mapObject({a: 1, b: 2}, mapper as any)
+                    expect(result).toStrictEqual({})
+                })
+            })
+        })
+
+        describe('And valid mapper', () => {
+            const mapper = {
+                'name': 'firstName',
+                'age': 'yearsOld',
+            } as const
+
+            describe('When called with empty object', () => {
+                test('Then it returns empty object', () => {
+                    expect(mapObject({}, mapper)).toStrictEqual({})
+                })
+            })
+
+            describe('When called with object without data in mapper', () => {
+                test('Then it returns empty object', () => {
+                    expect(mapObject({
+                        'jaja': 10
+                    }, mapper as any)).toStrictEqual({})
+                })
+            })
+
+            describe('When called with object with data in mapper', () => {
+                test('Then it returns object with mapped data', () => {
+                    const result = mapObject({
+                        'name': 'Jean',
+                        'age': 30,
+                    }, mapper)
+
+                    expect(result).toStrictEqual({
+                        firstName: 'Jean',
+                        yearsOld: 30
+                    })
                 })
             })
         })

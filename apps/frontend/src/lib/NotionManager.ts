@@ -1,5 +1,6 @@
 import { AppConfig }from '@config'
 import { NotionApi, type NotionReservation } from './NotionApi'
+import { mapObject } from '@mamieleo/utils'
 
 
 
@@ -20,7 +21,14 @@ type ReservationFilterQuery = {
     }
 }
 
-const DataMapper: Record<keyof NotionReservation, keyof Reservation> =  {}
+const DataMapper: Record<keyof NotionReservation, keyof Reservation> =  {
+    Name: 'name',
+    'Date réservation': 'reservationDate',
+    'Date entrée': 'dateIn',
+    'Date de sortie': 'dateOut',
+    'Nombre de nuit': 'numberOfNights',
+    'Tarif CFA': 'amount'
+} as const
 
 export class NotionManager {
     static #instance: NotionManager | undefined
@@ -44,7 +52,14 @@ export class NotionManager {
     async getReservations(filters: ReservationFilterQuery = {}): Promise<Reservation[]> {
 
         console.log('data: ', NotionApi.instance)
-        await NotionApi.instance.queryReservations()
-        return []
+        const rawBookings =  await NotionApi.instance.queryReservations()
+
+        if (!rawBookings || !Array.isArray(rawBookings)) {
+            return []
+        }
+
+        return rawBookings.map((rawBooking) => {
+            return mapObject(rawBooking, DataMapper)
+        })
     }
 }

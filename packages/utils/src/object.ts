@@ -31,11 +31,6 @@ function mergeArrays<T extends Arr, D extends Arr>(first: T, second: D) {
   return [...first, ...second]
 }
 
-export function deepMerge<T extends Obj, D extends Obj>(first: T, second: D) {
-  return mergeObjects(first, second)
-}
-
-
 function mergeProperties<T extends Obj, D extends Obj>(first: T, second: D) {
     
   if (Array.isArray(first) && Array.isArray(second)) {
@@ -45,3 +40,19 @@ function mergeProperties<T extends Obj, D extends Obj>(first: T, second: D) {
   return mergeObjects(first, second)
 
 }
+
+export function deepMerge<T extends Obj, D extends Obj>(first: T, second: D) {
+  return mergeObjects(first, second)
+}
+
+
+export function mapObject<T extends Obj, U extends Obj, Mapper extends Record<keyof T, keyof U>>(source: T, mapper: Mapper): U {
+  return Object.entries(source).reduce((acc, [key, value]) => {
+    const mappedKey = mapper[key as keyof T];
+    if (mappedKey)
+      acc[mappedKey] = value
+    return acc
+  }, {} as U)
+}
+
+
