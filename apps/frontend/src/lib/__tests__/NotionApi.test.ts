@@ -1,5 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
-import { NotionApi } from "../NotionApi";
+import { NotionApi } from "../server/NotionApi";
 import { AppConfig } from "../../../config/config";
 import { formatDateToString, typedMock } from "@mamieleo/utils";
 

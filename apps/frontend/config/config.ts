@@ -1,9 +1,11 @@
+import { env } from '$env/dynamic/private'
+
 export const AppConfig = {
     Notion: {
-        key: `${process.env.NOTION_API_KEY}`,
+        key: `${env.NOTION_API_KEY}`,
         url: 'https://api.notion.com/v1',
         databases: {
-            reservations: 'b3a73f987ed64260bfa8f1aef89df598',
+            reservations: '1770491d14a880f6940efd50931b4889',
             client: ''
         }
     }

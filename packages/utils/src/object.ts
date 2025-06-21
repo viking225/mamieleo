@@ -1,6 +1,4 @@
-type Obj = Record<string, any>
-type Arr = any[]
-
+import type { Obj, Arr, Mapper, MappedResult } from './types';
 
 function mergeObjects<T extends Obj, D extends Obj>(first: T, second: D) {
 
@@ -46,13 +44,17 @@ export function deepMerge<T extends Obj, D extends Obj>(first: T, second: D) {
 }
 
 
-export function mapObject<T extends Obj, U extends Obj, Mapper extends Record<keyof T, keyof U>>(source: T, mapper: Mapper): U {
+export function mapObject<T extends Obj, M extends Mapper<T>>(source: T, mapper: M) {
   return Object.entries(source).reduce((acc, [key, value]) => {
-    const mappedKey = mapper[key as keyof T];
-    if (mappedKey)
-      acc[mappedKey] = value
+
+    if (key in mapper) {
+      const mappedKey = mapper[key];
+      if (mappedKey) {
+        (acc as any)[mappedKey] = value;
+      }
+    }
     return acc
-  }, {} as U)
+  }, {} as MappedResult<T, M>)
 }
 
 

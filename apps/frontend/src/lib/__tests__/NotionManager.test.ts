@@ -1,6 +1,6 @@
 import { beforeAll, beforeEach, describe, expect, test, vi } from "vitest";
-import { NotionManager } from "../NotionManager";
-import { NotionApi, type NotionReservation } from "../NotionApi";
+import { NotionManager } from "../server/NotionManager";
+import { NotionApi, type NotionReservation } from "../server/NotionApi";
 
 vi.mock('../NotionApi.ts', () => ({
     NotionApi: {

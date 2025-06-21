@@ -168,8 +168,10 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-# IntelliJ based IDEs
+# Ide
 .idea
+.vscode 
+.cursor
 
 # Finder (MacOS) folder config
 .DS_Store
@@ -179,3 +181,7 @@ dist
 
 # config 
 **/config/env*
+
+
+# Svelte
+.svelte-kit
