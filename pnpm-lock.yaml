@@ -37,7 +37,7 @@ importers:
         specifier: ^5.0.0
         version: 5.0.3(svelte@5.20.2)(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1))
       '@tailwindcss/vite':
-        specifier: ^4.0.0
+        specifier: ^4.0.8
         version: 4.0.8(vite@6.1.1(@types/node@22.13.5)(jiti@2.4.2)(lightningcss@1.29.1))
       '@testing-library/jest-dom':
         specifier: ^6.6.3
@@ -64,7 +64,7 @@ importers:
         specifier: ^4.0.0
         version: 4.1.4(picomatch@4.0.2)(svelte@5.20.2)(typescript@5.7.3)
       tailwindcss:
-        specifier: ^4.0.0
+        specifier: ^4.0.8
         version: 4.0.8
       typescript:
         specifier: ^5.0.0

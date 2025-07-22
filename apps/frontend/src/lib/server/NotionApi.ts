@@ -1,12 +1,13 @@
 import { AppConfig } from '@config';
-import { deepMerge, formatDateToString } from '@mamieleo/utils';
-import  {
+import { deepMerge } from '@mamieleo/utils/object';
+import { formatDateToString } from '@mamieleo/utils/date';
+import {
 	type RequestParameters,
 	type NotionQueryResponse,
 	type QueryFilter,
 	RequestMethod,
 	NotionApiError,
-	type NotionReservationProperties,
+	type NotionReservationProperties
 } from './types/Notion';
 
 const RESERVATION_MAPPER = {
@@ -47,9 +48,6 @@ export class NotionApi {
 		if (method !== 'GET') {
 			options.body = JSON.stringify(body);
 		}
-
-		console.log('options: ', options);
-		console.log('Url: ', `${this.config.url}${path}`);
 
 		const response = await fetch(`${this.config.url}${path}`, options);
 
@@ -112,6 +110,10 @@ export class NotionApi {
 		}
 
 		const response = await this.makeRequest<NotionQueryResponse>(options);
-		return response.results.filter(result => result.object === 'page').map(({ properties, id }) => ({...properties, id} as unknown as NotionReservationProperties));
+		return response.results
+			.filter(result => result.object === 'page')
+			.map(
+				({ properties, id }) => ({ ...properties, id }) as unknown as NotionReservationProperties
+			);
 	}
 }

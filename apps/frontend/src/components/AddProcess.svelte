@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from "lucide-svelte";
-	import Button from "./Button.svelte";
-	import Step1 from "./steps/Step1.svelte";
-	import Step2 from "./steps/Step2.svelte";
-	import Step3 from "./steps/Step3.svelte";
+	import { ArrowLeftIcon, ArrowRightIcon, CheckIcon } from 'lucide-svelte';
+	import Button from './Button.svelte';
+	import Step1 from './steps/Step1.svelte';
+	import Step2 from './steps/Step2.svelte';
+	import Step3 from './steps/Step3.svelte';
 
 	// Props
 	let { onClose }: { onClose: () => void } = $props();
@@ -13,7 +13,7 @@
 	let formData = $state({
 		step1: {},
 		step2: {},
-		step3: {},
+		step3: {}
 	});
 
 	// Derived values
@@ -39,37 +39,40 @@
 
 	function handleSubmit() {
 		// Handle form submission
-		console.log("Form submitted:", formData);
+		console.log('Form submitted:', formData);
 		onClose();
 	}
 </script>
 
-<div class="flex flex-col min-h-screen w-full p-4">
+<div class="flex min-h-screen w-full flex-col p-4">
 	<!-- Progress bar -->
-	<div class="w-full bg-muted rounded-full h-4 mb-8">
-		<div class="bg-primary h-4 rounded-full transition-all duration-300" style="width: {progress}%" />
+	<div class="bg-muted mb-8 h-4 w-full rounded-full">
+		<div
+			class="bg-primary h-4 rounded-full transition-all duration-300"
+			style="width: {progress}%"
+		/>
 	</div>
 
 	<!-- Step indicator -->
-	<div class="text-center mb-8">
+	<div class="mb-8 text-center">
 		<p class="text-2xl font-medium">
 			Step {currentStep} of {totalSteps}
 		</p>
 	</div>
 
 	<!-- Form steps -->
-	<div class="flex-1 flex flex-col items-center justify-center">
+	<div class="flex flex-1 flex-col items-center justify-center">
 		{#if currentStep === 1}
-			<Step1 data={formData.step1} onUpdate={(data) => updateFormData("step1", data)} />
+			<Step1 data={formData.step1} onUpdate={data => updateFormData('step1', data)} />
 		{:else if currentStep === 2}
-			<Step2 data={formData.step2} onUpdate={(data) => updateFormData("step2", data)} />
+			<Step2 data={formData.step2} onUpdate={data => updateFormData('step2', data)} />
 		{:else}
-			<Step3 data={formData.step3} onUpdate={(data) => updateFormData("step3", data)} />
+			<Step3 data={formData.step3} onUpdate={data => updateFormData('step3', data)} />
 		{/if}
 	</div>
 
 	<!-- Navigation buttons -->
-	<div class="flex gap-4 mt-8">
+	<div class="mt-8 flex gap-4">
 		{#if currentStep > 1}
 			<Button variant="outline" onclick={previousStep} icon={ArrowLeftIcon}>Previous</Button>
 		{:else}

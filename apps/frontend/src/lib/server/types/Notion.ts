@@ -35,7 +35,7 @@ export type NumberProperty = {
 	};
 };
 
-type PhoneNumberProperty = {
+export type PhoneNumberProperty = {
 	type: 'phone_number';
 	phone_number: string;
 };
@@ -48,19 +48,19 @@ export type DateProperty = {
 	};
 };
 
-type RollupProperty = {
+export type RollupProperty = {
 	type: 'rollup';
 	rollup: {
 		type: 'rollup';
 	};
 };
 
-type CheckboxProperty = {
+export type CheckboxProperty = {
 	type: 'checkbox';
 	checkbox: boolean;
 };
 
-type SelectProperty = {
+export type SelectProperty = {
 	type: 'select';
 	select: {
 		id: string;
@@ -71,18 +71,15 @@ type SelectProperty = {
 
 export type FormulaProperty = {
 	type: 'formula';
-	formula: {
-		type: 'string' | 'number' | 'boolean' | 'date';
-		string?: string;
-		number?: number;
-		boolean?: boolean;
-		date?: string;
-	};
+	formula:
+		| { type: 'string'; string: string }
+		| { type: 'number'; number: string }
+		| { type: 'boolean'; boolean: string }
+		| { type: 'date'; date: string };
 };
 
-
 export type NotionReservationProperties = {
-	id: string
+	id: string;
 	'Date réservation': DateProperty;
 	'Date entrée': DateProperty;
 	'Date de sortie': DateProperty;

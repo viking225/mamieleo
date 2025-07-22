@@ -5,8 +5,18 @@
   "type": "module",
   "module": "./src/index.ts",
   "exports": {
-    ".": {
-      "import": "./src/index.ts"
+    ".": "./dist/index.js",
+    "./test": {
+      "import": "./src/test.ts"
+    },
+    "./object": {
+      "import": "./src/object.ts"
+    },
+    "./date": {
+      "import": "./src/date.ts"
+    },
+    "./type": {
+      "import": "./src/types.ts"
     }
   },
   "scripts": {

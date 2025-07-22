@@ -1,7 +1,7 @@
-import type { NotionReservation } from "$lib/server/NotionApi";
+import type { NotionReservation } from '$lib/server/NotionApi';
 
 export interface ViewProps {
-    data: {
-        bookings : Promise<NotionReservation[]>
-    }
+	data: {
+		bookings: Promise<NotionReservation[]>;
+	};
 }

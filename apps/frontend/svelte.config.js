@@ -15,7 +15,8 @@ const config = {
 		alias: {
 			'@components/*': 'src/components/*',
 			'@assets/*': 'src/assets/*',
-			'@config': '../frontend/config/config.ts'
+			'@config': './config/config.ts',
+			'@app-types/*': './src/types/*'
 		}
 	}
 };
